@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡密生成器</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .box { background: #fff; width: 90%; max-width: 500px; padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #6750A4; margin-top: 0; }
+        .row { display: flex; gap: 10px; margin-bottom: 16px; }
+        button { flex: 1; padding: 12px; background: #6750A4; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        button:hover { opacity: 0.9; }
+        .output { background: #F7F2FA; border-radius: 8px; padding: 16px; min-height: 100px; font-family: monospace; font-size: 14px; line-height: 1.8; word-break: break-all; white-space: pre-wrap; }
+        .tip { text-align: center; color: #888; font-size: 12px; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🔑 卡密生成器</h2>
+    
+    <div class="row">
+        <button onclick="gen('day')">天卡</button>
+        <button onclick="gen('week')">周卡</button>
+        <button onclick="gen('month')">月卡</button>
+        <button onclick="gen('year')">年卡</button>
+        <button onclick="gen('vip')">永久卡</button>
+    </div>
+
+    <div class="output" id="output">点击上方按钮生成卡密...</div>
+    
+    <p class="tip">生成后复制卡密，粘贴进你的 卡密.html 里即可。</p >
+</div>
+
+<script>
+    // 随机大小写字母池
+    const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    // 生成指定长度的随机字母（大小写混合，无规律）
+    function randomLetters(len) {
+        let result = "";
+        for (let i = 0; i < len; i++) {
+            result += CHARS.charAt(Math.floor(Math.random() * CHARS.length));
+        }
+        return result;
+    }
+
+    // 生成指定长度的随机数字
+    function randomNumbers(len) {
+        let result = "";
+        for (let i = 0; i < len; i++) {
+            result += Math.floor(Math.random() * 10);
+        }
+        return result;
+    }
+
+    // 生成随机二进制（0和1）
+    function randomBinary(len) {
+        let result = "";
+        for (let i = 0; i < len; i++) {
+            result += Math.floor(Math.random() * 2);
+        }
+        return result;
+    }
+
+    // 根据类型生成卡密
+    function gen(type) {
+        let prefix = "";
+        let body = "";
+
+        if (type === 'day') {
+            // 天卡：3-5位随机字母
+            prefix = randomLetters(Math.floor(Math.random() * 3) + 3);
+        } else if (type === 'week') {
+            // 周卡：6-8位随机字母
+            prefix = randomLetters(Math.floor(Math.random() * 3) + 6);
+        } else if (type === 'month') {
+            // 月卡：9-11位随机字母
+            prefix = randomLetters(Math.floor(Math.random() * 3) + 9);
+        } else if (type === 'year') {
+            // 年卡：12-15位随机字母
+            prefix = randomLetters(Math.floor(Math.random() * 4) + 12);
+        } else if (type === 'vip') {
+            // 永久卡：12-16位二进制
+            prefix = randomBinary(Math.floor(Math.random() * 5) + 12);
+        }
+
+        // 后面接一段随机数字，增强防猜性
+        body = randomNumbers(6);
+
+        const card = `${prefix}-${body}`;
+        document.getElementById('output').textContent += card + "\n";
+    }
+</script>
+</body>
+</html>
